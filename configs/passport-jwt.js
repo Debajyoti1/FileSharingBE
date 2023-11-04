@@ -11,13 +11,13 @@ const options = {
 };
 
 //This is a middleware which validates JWT token and if successful, it stores the user in req.user and pass it to next()
-passport.use(new JWTstrategy(options, async (jwtPayload, done) => {
+passport.use('jwt',new JWTstrategy(options, async (jwtPayload, done) => {
   try {
     const existingUser = await User.findById(jwtPayload._id);
     if (existingUser) {
       return done(null, existingUser);
     } else {
-      return done(null, false, { status: 401, message: 'Custom error message: Unauthorized' });
+      return done(null, false, { status: 401, message: 'message: Unauthorized' });
     }
   } catch (err) {
     console.log(err);
@@ -25,20 +25,5 @@ passport.use(new JWTstrategy(options, async (jwtPayload, done) => {
   }
 }));
 
-// Custom JWT strategy to pass null as user if not found
-passport.use('skipjwt', new JWTstrategy(options, async (jwtPayload, done) => {
-  try {
-    const existingUser = await User.findById(jwtPayload._id);
-    if (existingUser) {
-      return done(null, existingUser);
-    } else {
-      // Pass a default user to req.user if the user is not found
-      return done(null, true);
-    }
-  } catch (err) {
-    console.log(err);
-    return done(err, false, { status: 500, message: 'Internal Server Error' });
-  }
-}));
 
 module.exports = passport

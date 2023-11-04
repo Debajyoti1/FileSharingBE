@@ -22,7 +22,8 @@ const upload = multer({
     limits: limits
 })
 
-router.post('/upload', passport.authenticate('skipjwt', { session: false }), upload.array('files'), fileController.upload)
+router.post('/upload',passport.authenticate('jwt', { session: false }), upload.array('files'), fileController.upload)
+router.post('/uploadnoauth',upload.array('files'), fileController.uploadNoAuth)
 router.post('/delete', passport.authenticate('jwt', { session: false }), fileController.delete)
 
 module.exports = router
