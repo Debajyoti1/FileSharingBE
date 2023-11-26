@@ -16,14 +16,20 @@ const storage = multer.diskStorage({
 const limits = {
     fileSize: 2048 * 1024 * 1024, // 2GB limit
 };
-
+const limitsNoAuth={
+    fileSize: 256 * 1024 * 1024 // 256MB limit
+}
 const upload = multer({
     storage: storage,
     limits: limits
 })
-
+const uploadNoAuth = multer({
+    storage: storage,
+    limits: limitsNoAuth
+})
 router.post('/upload',passport.authenticate('jwt', { session: false }), upload.array('files'), fileController.upload)
-router.post('/uploadnoauth',upload.array('files'), fileController.uploadNoAuth)
+router.post('/uploadnoauth',uploadNoAuth.array('files'), fileController.uploadNoAuth)
 router.post('/delete', passport.authenticate('jwt', { session: false }), fileController.delete)
-
+router.get('/info/:id',fileController.getFileInfoById)
+router.get('/download/:id',fileController.downloadById)
 module.exports = router

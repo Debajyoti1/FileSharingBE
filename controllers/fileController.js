@@ -33,10 +33,10 @@ module.exports.upload = async (req, res) => {
     }
 }
 const getDefaultUser = async () => {
-    const userName=process.env.DEFAULT_USERNAME || 'def123user'
-    let user=await User.findOne({name: userName})
-    if (!user){
-        user=await User.create({
+    const userName = process.env.DEFAULT_USERNAME || 'def123user'
+    let user = await User.findOne({ name: userName })
+    if (!user) {
+        user = await User.create({
             email: process.env.DEFAULT_EMAIL || 'def1emaildebajyoti23user',
             name: userName,
             password: process.env.DEFAULT_PASSWORD || 'defpassdebajyotiword123user'
@@ -114,3 +114,31 @@ module.exports.delete = async (req, res) => {
         });
     }
 };
+
+module.exports.getFileInfoById = async (req, res) => {
+    try {
+        const fileId = req.params.id
+        const file = await File.findById(fileId)
+        return res.status(200).json({
+            message: file
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: 'Internal server error',
+        });
+    }
+}
+
+module.exports.downloadById = async (req, res) => {
+    try {
+        const fileId = req.params.id
+        const file = await File.findById(fileId)
+        return res.status(200).download(process.cwd()+'/uploads/'+file.name,file.actualName)
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: 'Internal server error',
+        });
+    }
+}

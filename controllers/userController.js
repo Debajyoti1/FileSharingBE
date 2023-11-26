@@ -18,8 +18,9 @@ module.exports.signin = async (req, res) => {
             return res.status(200).json({
                 message: 'Sign in successful',
                 data: {
-                    token: jwt.sign(existingUser, process.env.SECRET || 'sample-secret123', { expiresIn: '1d' })
-                }
+                    token: jwt.sign(existingUser, process.env.SECRET || 'sample-secret123', { expiresIn: '1d' }),
+                    user: existingUser
+                },
             })
         }
     } catch (err) {
