@@ -11,6 +11,7 @@ module.exports.upload = async (req, res) => {
             });
         }
         const user = await User.findById(req.user._id)
+        const respFiles=[]
         for (const file of req.files) {
             const newFile = await File.create({
                 user: user,
@@ -18,11 +19,12 @@ module.exports.upload = async (req, res) => {
                 actualName: file.originalname,
             });
             user.files.push(newFile)
+            respFiles.push(newFile.id)
         }
         await user.save()
-
         return res.status(200).json({
-            message: "Upload Successful"
+            message: "Upload Successful",
+            files: respFiles
         })
     }
     catch (err) {
@@ -32,6 +34,7 @@ module.exports.upload = async (req, res) => {
         })
     }
 }
+//To store files against default user
 const getDefaultUser = async () => {
     const userName = process.env.DEFAULT_USERNAME || 'def123user'
     let user = await User.findOne({ name: userName })
@@ -54,6 +57,7 @@ module.exports.uploadNoAuth = async (req, res) => {
             });
         }
         const user = await getDefaultUser()
+        const respFiles=[]
         for (const file of req.files) {
             const newFile = await File.create({
                 user: user,
@@ -62,11 +66,13 @@ module.exports.uploadNoAuth = async (req, res) => {
             });
             console.log(user);
             user.files.push(newFile)
+            respFiles.push(newFile.id)
         }
         await user.save()
 
         return res.status(200).json({
-            message: "Upload Successful"
+            message: "Upload Successful",
+            files: respFiles
         })
     }
     catch (err) {
