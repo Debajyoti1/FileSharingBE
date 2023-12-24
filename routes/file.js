@@ -31,5 +31,6 @@ router.post('/upload',passport.authenticate('jwt', { session: false }), upload.a
 router.post('/uploadnoauth',uploadNoAuth.array('files'), fileController.uploadNoAuth)
 router.post('/delete', passport.authenticate('jwt', { session: false }), fileController.delete)
 router.get('/info/:id',fileController.getFileInfoById)
+router.post('/info/',fileController.getFileInfoByIdMulti)
 router.get('/download/:id',fileController.downloadById)
 module.exports = router

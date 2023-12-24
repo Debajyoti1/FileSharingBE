@@ -135,6 +135,33 @@ module.exports.getFileInfoById = async (req, res) => {
         });
     }
 }
+module.exports.getFileInfoByIdMulti = async (req, res) => {
+    try {
+        const files = req.body.files;
+        // console.log(req.body);
+        const fileDetails = [];
+
+        for (const fileId of files) { // Assuming files contain file IDs
+            let file = await File.findById(fileId);
+            if (file) {
+                fileDetails.push(file);
+            } else {
+                // Handle case when file with ID doesn't exist
+                console.warn(`File with ID ${fileId} not found`);
+                fileDetails.push(null);
+            }
+        }
+
+        return res.status(200).json({
+            fileDetails: fileDetails // Sending back the retrieved file details
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: 'Internal server error',
+        });
+    }
+};
 
 module.exports.downloadById = async (req, res) => {
     try {
