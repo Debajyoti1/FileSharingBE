@@ -123,10 +123,21 @@ module.exports.delete = async (req, res) => {
 
 module.exports.getFileInfoById = async (req, res) => {
     try {
-        const fileId = req.params.id
-        const file = await File.findById(fileId)
+        const fileId = req.params.id;
+        const file = await File.findById(fileId).populate({
+            path: 'user',
+            select: 'name'
+
+        });
+
+        if (!file) {
+            return res.status(404).json({
+                message: 'File not found',
+            });
+        }
+
         return res.status(200).json({
-            message: file
+            message: file,
         });
     } catch (err) {
         console.error(err);
@@ -134,7 +145,8 @@ module.exports.getFileInfoById = async (req, res) => {
             message: 'Internal server error',
         });
     }
-}
+};
+
 module.exports.getFileInfoByIdMulti = async (req, res) => {
     try {
         const files = req.body.files;

@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const fileSchema = new mongoose.Schema({
 
     user: {
-        type: mongoose.Schema.Types.ObjectId
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     name: {
         type: String,
