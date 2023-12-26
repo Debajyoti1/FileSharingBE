@@ -106,7 +106,7 @@ module.exports.delete = async (req, res) => {
         const user = await User.findById(userId);
 
         // Update the user's files array by filtering out the deleted file ID
-        user.files = user.files.filter((fileId) => fileId.toString() !== fileId);
+        user.files = user.files.filter((fileid) => fileid.toString() !== fileId);
         // Save the updated user to the database
         await user.save();
 
