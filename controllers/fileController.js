@@ -112,6 +112,11 @@ module.exports.delete = async (req, res) => {
         // Save the updated user to the database
         await user.save();
 
+        fs.unlink(process.cwd()+'/uploads/'+file.name,(err)=>{
+            if (err) console.log('Error occured deleting the file'+err.message);
+            console.log('File deleted successfully');
+        })
+
         return res.status(200).json({
             message: 'File deleted successfully',
         });
