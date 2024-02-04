@@ -1,5 +1,7 @@
 const User = require('../models/user')
 const File = require('../models/file')
+const fs = require('fs');
+const path = require('path');
 
 
 module.exports.upload = async (req, res) => {
@@ -175,15 +177,26 @@ module.exports.getFileInfoByIdMulti = async (req, res) => {
     }
 };
 
+
 module.exports.downloadById = async (req, res) => {
     try {
-        const fileId = req.params.id
-        const file = await File.findById(fileId)
-        return res.status(200).download(process.cwd()+'/uploads/'+file.name,file.actualName)
+        const fileId = req.params.id;
+        const file = await File.findById(fileId);
+
+        if (!file) {
+            return res.status(404).json({ message: 'File not found' });
+        }
+
+        const filePath = path.join(process.cwd(), '/uploads/', file.name);
+
+        // Check if the file exists in the specified path
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ message: 'File not available in folder' });
+        }
+
+        return res.status(200).download(filePath, file.actualName);
     } catch (err) {
         console.error(err);
-        return res.status(500).json({
-            message: 'Internal server error',
-        });
+        return res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
