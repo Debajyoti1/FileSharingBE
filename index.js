@@ -22,8 +22,25 @@ const passportJWT = require('./configs/passport-jwt')
 // Import and use routes defined in separate modules
 app.use('/', require('./routes'));
 
-// Start the server
-const port = process.env.PORT || 8000; // Use the port defined in the environment variable, or default to port 8000
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
+// HTTP setup
+const httpPort = process.env.HTTP_PORT || 8000;
+const httpServer = http.createServer(app);
+
+httpServer.listen(httpPort, () => {
+  console.log(`HTTP Server started on port ${httpPort}`);
+});
+
+// HTTPS setup
+const httpsPort = process.env.HTTPS_PORT || 8443;
+const cert = fs.readFileSync('/certificates/certificate.crt', 'utf-8');
+const key = fs.readFileSync('/certificates/private.key', 'utf-8');
+const httpsParams = {
+  key: key,
+  cert: cert
+};
+
+const httpsServer = https.createServer(httpsParams, app);
+
+httpsServer.listen(httpsPort, () => {
+  console.log(`HTTPS Server started on port ${httpsPort}`);
 });
