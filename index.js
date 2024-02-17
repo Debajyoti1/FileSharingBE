@@ -6,6 +6,9 @@ const express = require('express'); // Web framework for Node.js
 const mongoose = require('./configs/mongoose'); // MongoDB config file is called to initiate DB connection
 const cors = require('cors')
 const defaultLog = require('./middlewares/defaultLog')
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
 
 // Create an instance of the Express application
 const app = express();
