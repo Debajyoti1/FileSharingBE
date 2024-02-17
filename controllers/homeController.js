@@ -5,7 +5,7 @@ module.exports.home = async (req, res) => {
     // res.cookie('b','c')
     try {
         return res.status(200).json({
-            message: "Hello World"
+            message: "File Share Backend - Debajyoti Dutta"
         })
     }
     catch (err) {
