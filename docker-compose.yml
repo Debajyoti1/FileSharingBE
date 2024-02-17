@@ -7,4 +7,5 @@ services:
       - "8141:8001"
     volumes:
       - /root/nginx/certificates:/certificates
+      - /root/FileSharingBE/uploads:/app/uploads
     restart: always
