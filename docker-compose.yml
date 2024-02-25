@@ -6,6 +6,6 @@ services:
       - "8140:8000"
       - "8141:8001"
     volumes:
-      - /root/nginx/certificates:/certificates
+      - /etc/letsencrypt/live/s.debajyotidutta.com:/certificates
       - /root/FileSharingBE/uploads:/app/uploads
     restart: always
