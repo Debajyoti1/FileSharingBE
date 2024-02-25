@@ -38,8 +38,8 @@ httpServer.listen(httpPort, () => {
 if (process.env.HTTPS_FLAG=='true'){
 
   const httpsPort = process.env.HTTPS_PORT || 8443;
-  const cert = fs.readFileSync('/certificates/certificate.crt', 'utf-8');
-  const key = fs.readFileSync('/certificates/private.key', 'utf-8');
+  const cert = fs.readFileSync(process.env.FULL_CHAIN, 'utf-8');
+  const key = fs.readFileSync(process.env.PRIV_KEY, 'utf-8');
   const httpsParams = {
     key: key,
     cert: cert
